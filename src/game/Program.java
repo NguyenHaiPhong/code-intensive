@@ -15,7 +15,6 @@ public class Program {
         gameWindow.add(gameCanvas);
         gameWindow.pack();
         gameWindow.setVisible(true);
-
         gameCanvas.gameLoop();
     }
 }

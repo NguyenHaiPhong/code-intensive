@@ -19,7 +19,7 @@ public class Animation extends Renderer {
     @Override
     public void render(Graphics pen, GameObject master) {
         BufferedImage image = this.images.get(this.currentImageIndex);
-        pen.drawImage(image, (int)master.position.x, (int)master.position.y, null);
+        pen.drawImage(image, (int)(master.position.x - image.getWidth() * master.anchor.x), (int)(master.position.y - image.getHeight() * master.anchor.y), null);
 
         count++;
         if(count > 10) {

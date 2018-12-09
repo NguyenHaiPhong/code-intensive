@@ -1,43 +1,31 @@
 package game;
 
+import game.enemy.Enemy;
+import game.player.Player;
+import game.player.PlayerBullet;
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class GameCanvas extends JPanel{
-    Background background;
-    Player player;
-    Text text;
-    static ArrayList<PlayerBullet> playerBullets;
-    
+
     public GameCanvas() {
-        this.background = new Background();
-        this.player = new Player();
-        this.text = new Text();
-        this.playerBullets = new ArrayList<>();
+        GameObject.addGameObject(new Background());
+        GameObject.addGameObject(new Player());
+        GameObject.addGameObject(new Enemy());
+//        GameObject.addGameObject();
     }
 
     @Override
     public void paint(Graphics pen) {
         pen.setColor(Color.WHITE);
         pen.fillRect(0, 0, 800, 600);
-        this.background.render(pen);
-        this.text.render(pen);
-        this.player.render(pen);
-        for(int i = 0; i < this.playerBullets.size(); i++) {
-            PlayerBullet bullet = this.playerBullets.get(i);
-            bullet.render(pen);
-        }
+        GameObject.renderAll(pen);
     }
 
     public void runAll() {
-        //
-        this.background.run();
-        this.player.run();
-        for(int i = 0; i < this.playerBullets.size(); i++) {
-            PlayerBullet bullet = this.playerBullets.get(i);
-            bullet.run();
-        }
+        GameObject.runAll();
     }
 
     public void renderAll() {

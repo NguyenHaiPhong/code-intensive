@@ -1,10 +1,11 @@
-package game;
+package game.player;
 
-import game.renderer.Animation;
+import game.GameObject;
+import game.GameSettings;
+import game.GameWindow;
 import tklibs.Mathx;
 import tklibs.SpriteUtils;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -26,7 +27,8 @@ public class Player extends GameObject {
         images.add(SpriteUtils.loadImage("assets/images/players/straight/5.png"));
         images.add(SpriteUtils.loadImage("assets/images/players/straight/6.png"));
 
-        this.renderer = new Animation(images);
+        this.renderer = new PlayerRenderer("Player name", images);
+//        this.renderer = new Animation(images);
     }
 
     int count = 0; // TODO: se fix
@@ -44,31 +46,33 @@ public class Player extends GameObject {
         if(GameWindow.isFirePress) {
             PlayerBullet bullet = new PlayerBullet();
             bullet.position.set(this.position.x, this.position.y);
-            GameCanvas.playerBullets.add(bullet);
+            GameObject.addGameObject(bullet);
             count = 0;
         }
     }
 
     private void move() {
         if(GameWindow.isUpPress) {
-            this.position.addThis(0, -1);
+            this.position.addThis(0, -4);
         }
         if(GameWindow.isDownPress) {
-            this.position.addThis(0, 1);
+            this.position.addThis(0, 4);
         }
         if(GameWindow.isLeftPress) {
-            this.position.addThis(-1, 0);
+            this.position.addThis(-4, 0);
         }
         if(GameWindow.isRightPress) {
-            this.position.addThis(1, 0);
+            this.position.addThis(4, 0);
         }
     }
 
     private void limitPlayerPosition() {
+        int halfWidth = (int) (GameSettings.PLAYER_WIDTH * this.anchor.x);
+        int halfHeight = (int) (GameSettings.PLAYER_HEIGHT * this.anchor.y);
         //limit x [0, game.Background.image.width] BACKGROUND_WIDTH
-        float x = (float)Mathx.clamp(this.position.x, 0, 384 - 32);
+        float x = (float)Mathx.clamp(this.position.x, halfWidth,  GameSettings.BACKGROUND_WIDTH - halfWidth);
         //limit y [0, Screen.height]
-        float y = (float)Mathx.clamp(this.position.y, 0, 600 - 48);
+        float y = (float)Mathx.clamp(this.position.y, halfHeight, GameSettings.SREEN_HEIGHT - halfHeight);
         this.position.set(x, y);
     }
 }

@@ -1,5 +1,6 @@
-package game;
+package game.player;
 
+import game.GameObject;
 import game.renderer.Animation;
 import tklibs.SpriteUtils;
 
