@@ -12,6 +12,7 @@ public class PlayerBullet extends GameObject {
     public PlayerBullet() {
         super();
         this.createRenderer();
+        this.velocity.set(0, -3);
 //        this.image = SpriteUtils.loadImage("assets/images/player-bullets/a/0.png");
     }
 
@@ -27,6 +28,6 @@ public class PlayerBullet extends GameObject {
 
     @Override
     public void run() {
-        this.position.addThis(0, -3);
+        super.run();
     }
 }

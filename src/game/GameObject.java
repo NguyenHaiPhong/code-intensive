@@ -3,7 +3,6 @@ package game;
 import game.renderer.Renderer;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class GameObject {
@@ -11,6 +10,17 @@ public class GameObject {
     public static ArrayList<GameObject> gameObjects = new ArrayList<>();
     public static void addGameObject(GameObject object) {
         gameObjects.add(object);
+    }
+
+    public static <E extends GameObject> E createGameObject(Class<E> clazz) {
+        try {
+            E newInstance = clazz.newInstance();
+            addGameObject(newInstance);
+            return newInstance;
+        } catch (Exception ex) {
+            return null;
+        }
+
     }
 
     public static void runAll() {
@@ -28,18 +38,19 @@ public class GameObject {
 
     }
 
-    //
     public Renderer renderer;
     public Vector2D position;
     public Vector2D anchor;
+    public Vector2D velocity;
 
     public GameObject() {
         this.position = new Vector2D(0, 0);
         this.anchor = new Vector2D(0.5f, 0.5f);
+        this.velocity = new Vector2D();
     }
 
     public void run() {
-
+        this.position.addThis(velocity);
     }
 
     public void render(Graphics pen) {

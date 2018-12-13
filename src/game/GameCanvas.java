@@ -11,9 +11,12 @@ import javax.swing.*;
 public class GameCanvas extends JPanel{
 
     public GameCanvas() {
-        GameObject.addGameObject(new Background());
-        GameObject.addGameObject(new Player());
-        GameObject.addGameObject(new Enemy());
+//        GameObject.addGameObject(new Background());
+        GameObject.createGameObject(Background.class);
+//        GameObject.addGameObject(new Player());
+        GameObject.createGameObject(Player.class);
+//        GameObject.addGameObject(new Enemy());
+        GameObject.createGameObject(Enemy.class);
 //        GameObject.addGameObject();
     }
 

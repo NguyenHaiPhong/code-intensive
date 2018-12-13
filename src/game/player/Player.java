@@ -1,5 +1,6 @@
 package game.player;
 
+import game.FrameCounter;
 import game.GameObject;
 import game.GameSettings;
 import game.GameWindow;
@@ -10,11 +11,14 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends GameObject {
+    FrameCounter fireCounter;
+
     public Player(){
         super();
 //        this.image = SpriteUtils.loadImage("assets/images/players/straight/0.png");
         this.position.set(200, 300);
         this.createRenderer();
+        this.fireCounter = new FrameCounter(20);
     }
 
     private void createRenderer() {
@@ -31,12 +35,11 @@ public class Player extends GameObject {
 //        this.renderer = new Animation(images);
     }
 
-    int count = 0; // TODO: se fix
     @Override
     public void run() {
+        super.run();
         this.move();
-        count++;
-        if(count > 20) {
+        if(this.fireCounter.run()) {
             this.fire();
         }
         this.limitPlayerPosition();
@@ -47,23 +50,27 @@ public class Player extends GameObject {
             PlayerBullet bullet = new PlayerBullet();
             bullet.position.set(this.position.x, this.position.y);
             GameObject.addGameObject(bullet);
-            count = 0;
+            this.fireCounter.reset();
         }
     }
 
     private void move() {
+        int vx = 0;
+        int vy = 0;
         if(GameWindow.isUpPress) {
-            this.position.addThis(0, -4);
+            vy = vy - 4;
         }
         if(GameWindow.isDownPress) {
-            this.position.addThis(0, 4);
+            vy = vy + 4;
         }
         if(GameWindow.isLeftPress) {
-            this.position.addThis(-4, 0);
+            vx = vx - 4;
         }
         if(GameWindow.isRightPress) {
-            this.position.addThis(4, 0);
+            vx = vx + 4;
         }
+        this.velocity.set(vx, vy);
+//        this.velocity.setLength(5);
     }
 
     private void limitPlayerPosition() {
