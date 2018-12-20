@@ -1,21 +1,26 @@
 package game.enemy;
 
+import game.FrameCounter;
 import game.GameObject;
 import game.GameSettings;
+import game.physics.BoxCollider;
+import game.physics.Physics;
 import game.renderer.Animation;
 import tklibs.SpriteUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Enemy extends GameObject {
-//    int direction = 0;
+public class Enemy extends GameObject implements Physics {
+    BoxCollider boxCollider;
+    FrameCounter fireCounter;
 
     public Enemy() {
         super();
-        this.position.set(0, -30);
         this.createRenderer();
         this.velocity.set(3, -1);
+        this.fireCounter = new FrameCounter(20);
+        this.boxCollider = new BoxCollider(this.position, this.anchor, 20, 20);
     }
 
     private void createRenderer() {
@@ -36,6 +41,9 @@ public class Enemy extends GameObject {
     public void run() {
         super.run();
         this.move();
+        if (this.fireCounter.run()) {
+            this.fire();
+        }
     }
 
     private void move() {
@@ -51,5 +59,16 @@ public class Enemy extends GameObject {
         if (this.position.y < GameSettings.ENEMY_HEIGHT / 2 && this.position.y < 0) {
             this.velocity.set(this.velocity.x, 1);
         }
+    }
+
+    public void fire() {
+        EnemyBullet bullet = GameObject.controlGameObject(EnemyBullet.class);
+        bullet.position.set(this.position.x, this.position.y);
+        this.fireCounter.reset();
+    }
+
+    @Override
+    public BoxCollider getBoxCollider() {
+        return this.boxCollider;
     }
 }

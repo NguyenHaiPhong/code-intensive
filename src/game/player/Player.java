@@ -47,9 +47,8 @@ public class Player extends GameObject {
 
     private void fire() {
         if(GameWindow.isFirePress) {
-            PlayerBullet bullet = new PlayerBullet();
+            PlayerBullet bullet = GameObject.controlGameObject(PlayerBullet.class);
             bullet.position.set(this.position.x, this.position.y);
-            GameObject.addGameObject(bullet);
             this.fireCounter.reset();
         }
     }
