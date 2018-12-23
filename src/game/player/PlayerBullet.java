@@ -43,7 +43,6 @@ public class PlayerBullet extends GameObject implements Physics {
 
     private void checkIntersect() {
         Enemy enemy = GameObject.findIntersectedBoxes(Enemy.class, this.boxCollider);
-        System.out.println(enemy);
         if (enemy != null) {
             this.deactivate();
             enemy.deactivate();

@@ -1,17 +1,21 @@
 package game.player;
 
-import game.FrameCounter;
-import game.GameObject;
-import game.GameSettings;
-import game.GameWindow;
+import game.*;
+import game.physics.BoxCollider;
+import game.physics.Physics;
+import game.renderer.Animation;
+import game.scene.EndingScene;
+import game.scene.SceneManager;
 import tklibs.Mathx;
 import tklibs.SpriteUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Player extends GameObject {
-    FrameCounter fireCounter;
+public class Player extends GameObjectPhysics {
+    FrameCounter fireCounter, immuneCounter;
+    int healthPoint;
+    boolean immune;
 
     public Player(){
         super();
@@ -19,6 +23,10 @@ public class Player extends GameObject {
         this.position.set(200, 300);
         this.createRenderer();
         this.fireCounter = new FrameCounter(20);
+        this.boxCollider = new BoxCollider(this.position, this.anchor, 20, 30);
+        this.healthPoint = 3;
+        this.immune = false;
+        this.immuneCounter = new FrameCounter(90);
     }
 
     private void createRenderer() {
@@ -31,8 +39,8 @@ public class Player extends GameObject {
         images.add(SpriteUtils.loadImage("assets/images/players/straight/5.png"));
         images.add(SpriteUtils.loadImage("assets/images/players/straight/6.png"));
 
-        this.renderer = new PlayerRenderer("Player name", images);
-//        this.renderer = new Animation(images);
+//        this.renderer = new PlayerRenderer("Player name", images);
+        this.renderer = new Animation(images);
     }
 
     @Override
@@ -43,6 +51,13 @@ public class Player extends GameObject {
             this.fire();
         }
         this.limitPlayerPosition();
+        this.isImmuning();
+    }
+
+    private void isImmuning() {
+        if(this.immune && this.immuneCounter.run()) {
+            this.immune = false;
+        }
     }
 
     private void fire() {
@@ -80,5 +95,18 @@ public class Player extends GameObject {
         //limit y [0, Screen.height]
         float y = (float)Mathx.clamp(this.position.y, halfHeight, GameSettings.SREEN_HEIGHT - halfHeight);
         this.position.set(x, y);
+    }
+
+    public void takeDamage(int damage) {
+        if (this.immune)
+            return;
+        this.healthPoint -= damage;
+        this.immune = true;
+        this.immuneCounter.reset();
+        if (this.healthPoint <= 0) {
+            this.healthPoint = 0;
+            this.deactivate();
+            SceneManager.signNewScene(new EndingScene());
+        }
     }
 }

@@ -2,6 +2,7 @@ package game.enemy;
 
 import game.FrameCounter;
 import game.GameObject;
+import game.GameObjectPhysics;
 import game.GameSettings;
 import game.physics.BoxCollider;
 import game.physics.Physics;
@@ -11,8 +12,7 @@ import tklibs.SpriteUtils;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Enemy extends GameObject implements Physics {
-    BoxCollider boxCollider;
+public class Enemy extends GameObjectPhysics {
     FrameCounter fireCounter;
 
     public Enemy() {
@@ -68,7 +68,9 @@ public class Enemy extends GameObject implements Physics {
     }
 
     @Override
-    public BoxCollider getBoxCollider() {
-        return this.boxCollider;
+    public void deactivate() {
+        super.deactivate();
+        EnemyExplosion explosion = GameObject.controlGameObject(EnemyExplosion.class);
+        explosion.position.set(this.position);
     }
 }

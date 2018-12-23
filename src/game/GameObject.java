@@ -53,8 +53,11 @@ public class GameObject {
         }
     }
 
+    public static void clearAll() {
+        gameObjects.clear();
+    }
+
     public static void runAll() {
-        System.out.println(gameObjects.size());
         for (int i = 0; i < gameObjects.size(); i++) {
             GameObject object = gameObjects.get(i);
             if (object.active) {
